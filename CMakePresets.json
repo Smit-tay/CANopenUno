@@ -1,0 +1,22 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "avr-arduino-uno",
+      "displayName": "Arduino Uno (Independent Toolchain)",
+      "description": "Cross-compiles for ATmega328P using the isolated integration sysroot",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/avr-independent.cmake",
+        "CMAKE_BUILD_TYPE": "MinSizeRel"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "build-uno",
+      "configurePreset": "avr-arduino-uno"
+    }
+  ]
+}

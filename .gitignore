@@ -1,0 +1,28 @@
+# Build artifacts (AVR-GCC / avr-objcopy output)
+*.hex
+*.elf
+*.o
+*.obj
+*.map
+*.eep
+*.lst
+*.sym
+*.lss
+
+# Build directories
+build/
+*.build/
+
+# Arduino IDE / arduino-cli artifacts
+*.ino.hex
+*.ino.elf
+
+# AVRDUDE / debug
+*.d
+
+# Editor/OS cruft
+.vs/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
