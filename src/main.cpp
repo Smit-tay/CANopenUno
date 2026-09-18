@@ -256,10 +256,29 @@ enum class MsgClass : uint8_t { Nmt, Sync, Emcy, Time, Pdo, Sdo, Hb, Other };
  * 11-bit COB-ID - same classification canopen_driver's co_driver_trace.c
  * uses, node-id (low 7 bits) is irrelevant for classification. */
 MsgClass classify(uint32_t canId) {
+	
+	/* NMT, SYNC, and TIME each have ONE fixed COB-ID, no node-id component -
+	 * unlike PDO/SDO/heartbeat below, there's no formula to break. An exact
+	 * match here is always correct, whatever COB-IDs any PDO gets reassigned
+	 * to. Must run before the functionCode mask below: 0x080 also matches
+	 * the EMCY function-code range, so SYNC needs to be caught here first. */
     if (canId == 0x000) return MsgClass::Nmt;
     if (canId == 0x080) return MsgClass::Sync;
     if (canId == 0x100) return MsgClass::Time;
 
+	/* Isolate the 4-bit function code (COB-ID bits 10-7), masking off the
+	 * low 7 node-id bits without shifting - result stays comparable to the
+	 * predefined-connection-set base values (0x180, 0x580, 0x700, etc.)
+	 * checked below:
+	 *   canId  : F F F F N N N N N N N   (F = function code, N = node-id)
+	 *   0x780  : 1 1 1 1 0 0 0 0 0 0 0
+	 *
+	 * CAVEAT: only correct for COB-IDs still on the formula
+	 * (base + nodeId). A hand-assigned COB-ID outside that formula (e.g.
+	 * this project's own TPDO5 at 0x690) won't match any base below and
+	 * falls through to MsgClass::Other. Even on a match, canId & 0x07F is
+	 * NOT reliably the sender's real node-id - only true under the same
+	 * formula assumption. */
     uint16_t functionCode = canId & 0x780;
 
     if (functionCode == 0x080) return MsgClass::Emcy; /* 0x081-0x0FF, node!=0 */
