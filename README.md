@@ -61,6 +61,13 @@ easy to reason about side by side.
 
 Built with AVR-GCC and flashed with AVRDUDE (both vendored outside the corporate build system). No Arduino IDE / `arduino-cli` dependency.
 
+## License
+
+This project's own code is MIT licensed (see `LICENSE`). It statically links two third-party
+libraries, fetched at build time rather than vendored — [MCP_CAN_lib](https://github.com/coryjfowler/MCP_CAN_lib)
+(Cory Fowler, LGPL-3.0) and [ArduinoCore-avr](https://github.com/arduino/ArduinoCore-avr)
+(Arduino SA, LGPL-2.1-or-later). See `THIRD_PARTY_LICENSES.md` for full attribution.
+
 ## Status
 
 Verified on real hardware against the master: NMT state transitions, SDO in both
